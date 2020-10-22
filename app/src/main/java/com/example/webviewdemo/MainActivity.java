@@ -25,13 +25,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //CustomWebViewClient client = new CustomWebViewClient(this);
-
         webView=findViewById(R.id.webViewId);
-        //webView.setWebViewClient(client);
-        //
-        webView.setWebViewClient(new WebViewClient(){
+        CustomWebViewClient client = new CustomWebViewClient(this);
+        webView.setWebViewClient(client);
 
+        webView.setWebViewClient(new WebViewClient(){
+            //API Level >=24
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request){    //to solve 'go to external browser' problem
                 boolean isLocalUrl = false;
@@ -56,11 +55,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        //
+
 
         WebSettings webSettings = webView.getSettings();
-        //webView.loadUrl("https://github.com/AshrafulAlamS/");    //to load website
-        webView.loadUrl("https://github.com/");    //to load website
+        webView.loadUrl("https://github.com/AshrafulAlamS/");    //to load website
         webView.getSettings().setJavaScriptEnabled(true);     //It enable javaScript
 
 
@@ -88,28 +86,32 @@ class CustomWebViewClient extends WebViewClient {
     };
 
     //API Level < 24
-      /*  @Override
+        @Override
         public boolean shouldOverrideUrlLoading(WebView view, String url){
-            boolean isLocalUrl = false;
-            try {
-                URL givenUrl = new URL(url);
-                String host = givenUrl.getHost();
+           // if(url != null && (url.startsWith("http://") || url.startsWith("https://"))){   // to access http & https both
+                boolean isLocalUrl = false;
+                try {
+                    URL givenUrl = new URL(url);
+                    String host = givenUrl.getHost();
 
-                if (host.contains("github.com"))
-                    isLocalUrl = true;
-            }catch (MalformedURLException e){
+                    if (host.contains("github.com"))
+                        isLocalUrl = true;
+                }catch (MalformedURLException e){
 
-            }
+                }
 
-            if (isLocalUrl){
-                return super.shouldOverrideUrlLoading(view, url);
-                //return false;
-            }else {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                startActivity(intent);
-                return true;
-            }
-        }*/
+                if (isLocalUrl){
+                    return super.shouldOverrideUrlLoading(view, url);
+                    //return false;
+                }else {
+                    view.getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)));
+                    return true;
+                }
+
+            /*}else {
+                return false;
+            }*/
+        }
 
     //API Level >=24
   /*
